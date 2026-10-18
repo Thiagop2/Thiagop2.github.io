@@ -29,13 +29,13 @@ body {
   line-height: 1.5;
   padding: 32px 16px 48px;
 }
-.grid { max-width: 880px; margin: 0 auto; display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
+.grid { position: relative; z-index: 1; max-width: 880px; margin: 0 auto; display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
 .tile { background: var(--tile); border: 1px solid var(--line); border-radius: 22px; padding: 24px; }
 .s6 { grid-column: span 6; }
 .s2 { grid-column: span 2; }
 
 /* Perfil */
-.profile { display: flex; align-items: center; gap: 28px; }
+.profile { position: relative; display: flex; align-items: center; gap: 28px; }
 .photo {
   width: 136px; height: 136px; flex: none;
   border-radius: 26px; overflow: hidden;
@@ -77,6 +77,16 @@ a:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
 
 footer { max-width: 880px; margin: 24px auto 0; color: var(--muted); font-size: .8125rem; }
 
+/* Fluxograma animado */
+.flow { display: block; width: 100%; height: auto; overflow: visible; }
+.flow .n { fill: #fff; stroke: #0E7C7B; stroke-width: 1.5; animation: glow 3.6s ease-in-out infinite; }
+@keyframes glow {
+  0%, 100% { stroke-opacity: .35; fill: #fff; }
+  50% { stroke-opacity: 1; fill: #E6F1F0; }
+}
+.mini { position: absolute; top: 20px; right: 24px; width: 170px; display: none; pointer-events: none; }
+@media (min-width: 820px) { .mini { display: block; } }
+
 @media (max-width: 700px) {
   .s2 { grid-column: span 6; }
   .profile { flex-direction: column; align-items: flex-start; }
@@ -84,6 +94,7 @@ footer { max-width: 880px; margin: 24px auto 0; color: var(--muted); font-size: 
   .link span { max-width: none; }
 }
 @media (prefers-reduced-motion: reduce) {
+  .flow .n { animation: none; }
   .link, .cta { transition: none; }
   .link:hover, .link:focus-visible, .cta:hover, .cta:focus-visible { transform: none; }
 }
@@ -106,6 +117,20 @@ footer { max-width: 880px; margin: 24px auto 0; color: var(--muted); font-size: 
         <li>Gestão de backlog</li>
       </ul>
     </div>
+    <svg id="flow" class="flow mini" viewBox="0 0 200 90" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="#9CC2C1" stroke-width="1.5" stroke-linecap="round">
+        <path d="M19 45H30M66 45H78M114 45H124M160 45H179"/>
+        <path d="M96 63V80H186V52" stroke-dasharray="3 4"/>
+      </g>
+      <circle class="n" style="animation-delay:0s" cx="12" cy="45" r="7"/>
+      <rect class="n" style="animation-delay:.7s" x="30" y="33" width="36" height="24" rx="6"/>
+      <path class="n" style="animation-delay:1.4s" d="M96 27L114 45L96 63L78 45Z" stroke-linejoin="round"/>
+      <rect class="n" style="animation-delay:2.1s" x="124" y="33" width="36" height="24" rx="6"/>
+      <circle class="n" style="animation-delay:2.8s" cx="186" cy="45" r="7"/>
+      <path d="M182.5 45.5l3 3 5-6" fill="none" stroke="#0E7C7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle class="pkt" r="2.8" fill="#F26B4F"><animateMotion dur="3.6s" repeatCount="indefinite" path="M12 45H186"/></circle>
+      <circle class="pkt" r="2.8" fill="#F26B4F"><animateMotion dur="2.4s" begin="1.8s" repeatCount="indefinite" path="M96 63V80H186V52"/></circle>
+    </svg>
   </header>
 
   <div class="tile s2 cred"><strong>45+</strong><span>fluxos automatizados em produção</span></div>
@@ -131,5 +156,10 @@ footer { max-width: 880px; margin: 24px auto 0; color: var(--muted); font-size: 
 
 </main>
 <footer>Feito com HTML e CSS, hospedado no GitHub Pages.</footer>
+<script>
+if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.querySelectorAll('.pkt').forEach(function (el) { el.remove(); });
+}
+</script>
 </body>
 </html>
